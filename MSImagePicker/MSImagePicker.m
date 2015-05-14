@@ -68,8 +68,9 @@
 }
 
 - (void) done:(id)sender {
-    NSLog(@"%@", self.images);
-    NSLog(@"%@", self.indexPaths);
+    if ([self.msDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingImage:)]) {
+        [self.msDelegate imagePickerController:self didFinishPickingImage:self.images];
+    }
 }
 
 -(UIView*) getPUCollectionView:(UIView*)v {
@@ -224,4 +225,9 @@
     }
 }
 
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker; {
+    if ([self.msDelegate respondsToSelector:@selector(imagePickerControllerDidCancel:)]) {
+        [self.msDelegate imagePickerControllerDidCancel:self];
+    }
+}
 @end

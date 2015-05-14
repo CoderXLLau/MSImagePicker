@@ -28,7 +28,16 @@
 
 - (IBAction)doPicker:(id)sender {
     MSImagePicker* picker = [[MSImagePicker alloc] init];
+    picker.msDelegate = self;
     
     [self presentViewController:picker animated:true completion:nil];
+}
+
+- (void)imagePickerController:(MSImagePicker *)picker didFinishPickingImage:(NSArray *)images; {
+    NSLog(@"%@", images);
+}
+
+- (void)imagePickerControllerDidCancel:(MSImagePicker *)picker; {
+    NSLog(@"do cancel");
 }
 @end

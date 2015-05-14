@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class MSImagePicker;
+
+@protocol MSImagePickerDelegate<NSObject>
+
+@optional
+- (void)imagePickerController:(MSImagePicker *)picker didFinishPickingImage:(NSArray *)images;
+- (void)imagePickerControllerDidCancel:(MSImagePicker *)picker;
+
+@end
+
+/**
+ *  This class is just for select image
+ */
 @interface MSImagePicker : UIImagePickerController
 <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -15,5 +28,7 @@
  * save all selected image
  */
 @property (strong, nonatomic) NSMutableArray* images;
+
+@property (weak, nonatomic) id<MSImagePickerDelegate> msDelegate;
 
 @end

@@ -19,10 +19,8 @@
 
 @property (retain, nonatomic) id lastDelegate;
 
-/**
- *  key-value ((image url) - (uiimage))
- */
-@property (retain, nonatomic) NSMutableDictionary* data;
+@property (retain, nonatomic) NSIndexPath* curIndexPath;
+@property (retain, nonatomic) NSMutableArray* indexPaths;
 
 @end
 
@@ -31,14 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.delegate = self;
-}
-
-- (NSMutableDictionary*) data {
-    if (_data == nil) {
-        _data = [NSMutableDictionary new];
-    }
-    
-    return _data;
 }
 
 - (Class) PUPhotoView {
@@ -51,6 +41,14 @@
 
 - (Class) PUGridVC {
     return NSClassFromString(@"PUUIMomentsGridViewController");
+}
+
+- (NSMutableArray*) indexPaths {
+    if (_indexPaths == nil) {
+        _indexPaths = [NSMutableArray new];
+    }
+    
+    return _indexPaths;
 }
 
 - (NSMutableArray*) images {
@@ -155,8 +153,24 @@
     
     self.lastDelegate = [collection valueForKey:@"delegate"];
     [collection setValue:self forKey:@"delegate"];
+    
+    self.lastDoneButton = viewController.navigationItem.rightBarButtonItem;
 }
 
+/**
+ *
+ *
+ *  @return -1 not in
+ */
+- (int) isCurIndexInIndexPaths {
+    for (int i = 0; i < self.indexPaths.count; i++) {
+        if (((NSIndexPath*)self.indexPaths[i]).row == self.curIndexPath.row) {
+            return i;
+        }
+    }
+    
+    return -1;
+}
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -164,6 +178,8 @@
     if ([self.lastDelegate respondsToSelector:sel]) {
         [self.lastDelegate performSelector:sel withObject:collectionView withObject:indexPath];
     }
+    
+    self.curIndexPath = indexPath;
     
     UIView* cell = [collectionView cellForItemAtIndexPath:indexPath];
     
@@ -184,19 +200,21 @@
 // The delegate will receive one or the other, but not both, depending whether the user
 // confirms or cancels.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo; {
-    id url = [editingInfo objectForKey:UIImagePickerControllerReferenceURL];
-    
-    if ([self.data objectForKey:url] != nil) {
-        [self.data removeObjectForKey:url];
+    int idx = [self isCurIndexInIndexPaths];
+    if (idx == -1) {
+        // select
+        [self.indexPaths addObject:self.curIndexPath];
+        [self.images addObject:image];
     } else {
-        [self.data setValue:image forKey:url];
+        // deselect
+        [self.indexPaths removeObjectAtIndex:idx];
+        [self.images removeObjectAtIndex:idx];
     }
     
-    if (self.data.allKeys.count == 0) {
-        picker.topViewController.navigationItem.rightBarButtonItem = self.lastDoneButton;
-    } else {
-        self.lastDoneButton = picker.topViewController.navigationItem.rightBarButtonItem;
+    if (self.images.count == 1) {
         picker.topViewController.navigationItem.rightBarButtonItem = self.doneButton;
+    } else if (self.images.count == 0) {
+        picker.topViewController.navigationItem.rightBarButtonItem = self.lastDoneButton;
     }
 }
 

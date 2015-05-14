@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#import "MSImagePicker.h"
+
 @interface ViewController ()
 
 @end
@@ -24,4 +26,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)doPicker:(id)sender {
+    MSImagePicker* picker = [[MSImagePicker alloc] init];
+    
+    [self presentViewController:picker animated:true completion:nil];
+}
 @end

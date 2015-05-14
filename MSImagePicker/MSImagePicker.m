@@ -93,10 +93,24 @@
  *  @param v must be PUPhotoView
  */
 - (void) addIndicatorButton:(UIView*) v {
-    UIButton* button = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    button.frame = CGRectMake(0, 0, 20, 20);
+    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 15;
+    button.backgroundColor = [UIColor blueColor];
     [v addSubview:button];
+    
+    [button setTranslatesAutoresizingMaskIntoConstraints:false];
+    
+    NSArray* cs1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[button(30)]-1-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(button)];
+    
+    NSArray* cs2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[button(30)]-1-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(button)];
+
+    [v addConstraints:cs1];
+    [v addConstraints:cs2];
+    
+    [button setSelected:true];
     button.hidden = false;
+    
+    [v updateConstraintsIfNeeded];
 }
 
 /**
@@ -143,13 +157,20 @@
     UIButton* indicatorButton = [self getIndicatorButton:cell];
     
     if (indicatorButton == nil) {
-        // add button and image in self.images
+        // do select(add button)
+        [self addIndicatorButton:cell];
     } else {
-        // remove button and image in self.images
+        // do deselect (remove button)
+        [self removeIndicatorButton:cell];
     }
     
     return YES;
 }
 
+// The picker does not dismiss itself; the client dismisses it in these callbacks.
+// The delegate will receive one or the other, but not both, depending whether the user
+// confirms or cancels.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo; {
+}
 
 @end

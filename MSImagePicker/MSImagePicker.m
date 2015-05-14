@@ -68,7 +68,8 @@
 }
 
 - (void) done:(id)sender {
-    
+    NSLog(@"%@", self.images);
+    NSLog(@"%@", self.indexPaths);
 }
 
 -(UIView*) getPUCollectionView:(UIView*)v {
@@ -168,7 +169,8 @@
  */
 - (int) isCurIndexInIndexPaths {
     for (int i = 0; i < self.indexPaths.count; i++) {
-        if (((NSIndexPath*)self.indexPaths[i]).row == self.curIndexPath.row) {
+        if (((NSIndexPath*)self.indexPaths[i]).row == self.curIndexPath.row &&
+            ((NSIndexPath*)self.indexPaths[i]).section == self.curIndexPath.section) {
             return i;
         }
     }

@@ -144,6 +144,9 @@
 
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;{
+    self.curIndexPath = nil;
+    [self.images removeAllObjects];
+    [self.indexPaths removeAllObjects];
     
     UIView* collection = [self getPUCollectionView:viewController.view];
     
@@ -156,6 +159,7 @@
     
     self.lastDoneButton = viewController.navigationItem.rightBarButtonItem;
 }
+
 
 /**
  *

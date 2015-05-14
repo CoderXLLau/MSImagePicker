@@ -19,6 +19,11 @@
 
 @property (retain, nonatomic) id lastDelegate;
 
+/**
+ *  key-value ((image url) - (uiimage))
+ */
+@property (retain, nonatomic) NSMutableDictionary* data;
+
 @end
 
 @implementation MSImagePicker
@@ -26,6 +31,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.delegate = self;
+}
+
+- (NSMutableDictionary*) data {
+    if (_data == nil) {
+        _data = [NSMutableDictionary new];
+    }
+    
+    return _data;
 }
 
 - (Class) PUPhotoView {
@@ -171,6 +184,20 @@
 // The delegate will receive one or the other, but not both, depending whether the user
 // confirms or cancels.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo; {
+    id url = [editingInfo objectForKey:UIImagePickerControllerReferenceURL];
+    
+    if ([self.data objectForKey:url] != nil) {
+        [self.data removeObjectForKey:url];
+    } else {
+        [self.data setValue:image forKey:url];
+    }
+    
+    if (self.data.allKeys.count == 0) {
+        picker.topViewController.navigationItem.rightBarButtonItem = self.lastDoneButton;
+    } else {
+        self.lastDoneButton = picker.topViewController.navigationItem.rightBarButtonItem;
+        picker.topViewController.navigationItem.rightBarButtonItem = self.doneButton;
+    }
 }
 
 @end

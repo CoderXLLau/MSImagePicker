@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-#import "MSImagePicker.h"
+#import "MSImagePickerController.h"
 #import <QuickLook/QLPreviewController.h>
 
 @interface ViewController ()
@@ -28,13 +28,13 @@
 }
 
 - (IBAction)doPicker:(id)sender {
-    MSImagePicker* picker = [[MSImagePicker alloc] init];
+    MSImagePickerController* picker = [[MSImagePickerController alloc] init];
     picker.msDelegate = self;
     
     [self presentViewController:picker animated:true completion:nil];
 }
 
-- (void)imagePickerController:(MSImagePicker *)picker didFinishPickingImage:(NSArray *)images; {
+- (void)imagePickerController:(MSImagePickerController *)picker didFinishPickingImage:(NSArray *)images; {
     self.array = images;
 
     int i = 0;
@@ -77,7 +77,8 @@
 }
 
 
-- (void)imagePickerControllerDidCancel:(MSImagePicker *)picker; {
+- (void)imagePickerControllerDidCancel:(MSImagePickerController *)picker; {
+    [picker dismissViewControllerAnimated:true completion:nil];
     NSLog(@"do cancel");
 }
 @end

@@ -1,17 +1,17 @@
 //
-//  MSImagePicker.m
+//  MSImagePickerController.m
 //  Demo
 //
 //  Created by DamonDing on 15/5/14.
 //  Copyright (c) 2015年 zxm. All rights reserved.
 //
 
-#import "MSImagePicker.h"
+#import "MSImagePickerController.h"
 #import <objc/runtime.h>
 
 static char attachSelfKey;
 
-@interface MSImagePicker ()
+@interface MSImagePickerController ()
 
 @property (readonly) Class PUGridVC;
 @property (readonly) Class PUCollectionView;
@@ -25,9 +25,10 @@ static char attachSelfKey;
 @property (retain, nonatomic) NSIndexPath* curIndexPath;
 @property (retain, nonatomic) NSMutableArray* indexPaths;
 
+@property (assign, nonatomic) BOOL haveExchangeMethod;
 @end
 
-@implementation MSImagePicker
+@implementation MSImagePickerController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -149,8 +150,6 @@ static char attachSelfKey;
 
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;{
-    static dispatch_once_t token;
-    
     self.curIndexPath = nil;
     [self.images removeAllObjects];
     [self.indexPaths removeAllObjects];
@@ -158,6 +157,13 @@ static char attachSelfKey;
     UIView* collection = [self getPUCollectionView:viewController.view];
     
     if (collection == nil) {
+        if (self.haveExchangeMethod) {
+            Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
+            Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
+            method_exchangeImplementations(m2, m3);
+
+            self.haveExchangeMethod = NO;
+        }
         return;
     }
     
@@ -166,19 +172,18 @@ static char attachSelfKey;
      */
     self.lastDelegate = [collection valueForKey:@"delegate"];
     [collection setValue:self forKey:@"delegate"];
+
+    Method m1 = class_getInstanceMethod([self class], @selector(override_collectionView:cellForItemAtIndexPath:));
     
-    dispatch_once(&token, ^{
-        Method m1 = class_getInstanceMethod([self class], @selector(override_collectionView:cellForItemAtIndexPath:));
-        
-        class_addMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:), method_getImplementation(m1), method_getTypeEncoding(m1));
-        
-        Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
-        Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
-        
-        method_exchangeImplementations(m2, m3);
-    });
+    class_addMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:), method_getImplementation(m1), method_getTypeEncoding(m1));
     
-    objc_setAssociatedObject(self.lastDelegate, &attachSelfKey, self, OBJC_ASSOCIATION_RETAIN);
+    Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
+    Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
+    
+    method_exchangeImplementations(m2, m3);
+    self.haveExchangeMethod = YES;
+    
+    objc_setAssociatedObject(self.lastDelegate, &attachSelfKey, self, OBJC_ASSOCIATION_ASSIGN);
     
     self.lastDoneButton = viewController.navigationItem.rightBarButtonItem;
 }
@@ -201,7 +206,7 @@ static char attachSelfKey;
 }
 
 /**
- *  careful self is PUUIMomentsGridViewController now
+ *  careful self is PUUIMomentsGridViewController,PUUIPhotosAlbumViewController... now
  *
  *  @param collectionView
  *  @param indexPath
@@ -209,7 +214,7 @@ static char attachSelfKey;
  *  @return
  */
 - (UICollectionViewCell *)override_collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath; {
-    MSImagePicker* picker = (MSImagePicker*)objc_getAssociatedObject(self, &attachSelfKey);
+    MSImagePickerController* picker = (MSImagePickerController*)objc_getAssociatedObject(self, &attachSelfKey);
     
     UICollectionViewCell* cell = [self performSelector:@selector(override_collectionView:cellForItemAtIndexPath:) withObject:collectionView withObject:indexPath];
     
@@ -252,6 +257,15 @@ static char attachSelfKey;
     }
     
     return YES;
+}
+
+- (void)dealloc
+{
+    if (self.haveExchangeMethod) {
+        Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
+        Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
+        method_exchangeImplementations(m2, m3);
+    }
 }
 
 // The picker does not dismiss itself; the client dismisses it in these callbacks.

@@ -1,5 +1,5 @@
 //
-//  MSImagePicker.h
+//  MSImagePickerController.h
 //  Demo
 //
 //  Created by DamonDing on 15/5/14.
@@ -8,20 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@class MSImagePicker;
+@class MSImagePickerController;
 
 @protocol MSImagePickerDelegate<NSObject>
 
 @optional
-- (void)imagePickerController:(MSImagePicker *)picker didFinishPickingImage:(NSArray *)images;
-- (void)imagePickerControllerDidCancel:(MSImagePicker *)picker;
+- (void)imagePickerController:(MSImagePickerController *)picker didFinishPickingImage:(NSArray *)images;
+- (void)imagePickerControllerDidCancel:(MSImagePickerController *)picker;
 
 @end
 
 /**
  *  This class is just for select image
  */
-@interface MSImagePicker : UIImagePickerController
+@interface MSImagePickerController : UIImagePickerController
 <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 /**

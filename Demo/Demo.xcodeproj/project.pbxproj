@@ -14,8 +14,8 @@
 		8E9D3BC61B04A3A6005AAF00 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D3BC51B04A3A6005AAF00 /* Images.xcassets */; };
 		8E9D3BC91B04A3A6005AAF00 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D3BC71B04A3A6005AAF00 /* LaunchScreen.xib */; };
 		8E9D3BD51B04A3A6005AAF00 /* DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D3BD41B04A3A6005AAF00 /* DemoTests.m */; };
-		8E9D3BE11B04A404005AAF00 /* MSImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D3BE01B04A404005AAF00 /* MSImagePicker.m */; };
 		8E9D3BE31B0594A4005AAF00 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E9D3BE21B0594A3005AAF00 /* QuickLook.framework */; };
+		8E9D3BE91B05BD67005AAF00 /* MSImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D3BE81B05BD67005AAF00 /* MSImagePickerController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,9 +42,9 @@
 		8E9D3BCE1B04A3A6005AAF00 /* DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E9D3BD31B04A3A6005AAF00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E9D3BD41B04A3A6005AAF00 /* DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoTests.m; sourceTree = "<group>"; };
-		8E9D3BDF1B04A404005AAF00 /* MSImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSImagePicker.h; sourceTree = "<group>"; };
-		8E9D3BE01B04A404005AAF00 /* MSImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSImagePicker.m; sourceTree = "<group>"; };
 		8E9D3BE21B0594A3005AAF00 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		8E9D3BE71B05BD67005AAF00 /* MSImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSImagePickerController.h; sourceTree = "<group>"; };
+		8E9D3BE81B05BD67005AAF00 /* MSImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSImagePickerController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,8 +130,8 @@
 		8E9D3BDE1B04A3E6005AAF00 /* MSImagePicker */ = {
 			isa = PBXGroup;
 			children = (
-				8E9D3BDF1B04A404005AAF00 /* MSImagePicker.h */,
-				8E9D3BE01B04A404005AAF00 /* MSImagePicker.m */,
+				8E9D3BE71B05BD67005AAF00 /* MSImagePickerController.h */,
+				8E9D3BE81B05BD67005AAF00 /* MSImagePickerController.m */,
 			);
 			name = MSImagePicker;
 			path = ../../MSImagePicker;
@@ -238,9 +238,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E9D3BC11B04A3A5005AAF00 /* ViewController.m in Sources */,
+				8E9D3BE91B05BD67005AAF00 /* MSImagePickerController.m in Sources */,
 				8E9D3BBE1B04A3A5005AAF00 /* AppDelegate.m in Sources */,
 				8E9D3BBB1B04A3A5005AAF00 /* main.m in Sources */,
-				8E9D3BE11B04A404005AAF00 /* MSImagePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

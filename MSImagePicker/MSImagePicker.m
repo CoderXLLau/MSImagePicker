@@ -7,6 +7,9 @@
 //
 
 #import "MSImagePicker.h"
+#import <objc/runtime.h>
+
+static char attachSelfKey;
 
 @interface MSImagePicker ()
 
@@ -146,6 +149,8 @@
 
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;{
+    static dispatch_once_t token;
+    
     self.curIndexPath = nil;
     [self.images removeAllObjects];
     [self.indexPaths removeAllObjects];
@@ -156,8 +161,24 @@
         return;
     }
     
+    /**
+     *  the collection base class is UICollectionView, so delegate, datasoucr ...
+     */
     self.lastDelegate = [collection valueForKey:@"delegate"];
     [collection setValue:self forKey:@"delegate"];
+    
+    dispatch_once(&token, ^{
+        Method m1 = class_getInstanceMethod([self class], @selector(override_collectionView:cellForItemAtIndexPath:));
+        
+        class_addMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:), method_getImplementation(m1), method_getTypeEncoding(m1));
+        
+        Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
+        Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
+        
+        method_exchangeImplementations(m2, m3);
+    });
+    
+    objc_setAssociatedObject(self.lastDelegate, &attachSelfKey, self, OBJC_ASSOCIATION_RETAIN);
     
     self.lastDoneButton = viewController.navigationItem.rightBarButtonItem;
 }
@@ -177,6 +198,36 @@
     }
     
     return -1;
+}
+
+/**
+ *  careful self is PUUIMomentsGridViewController now
+ *
+ *  @param collectionView
+ *  @param indexPath
+ *
+ *  @return
+ */
+- (UICollectionViewCell *)override_collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath; {
+    MSImagePicker* picker = (MSImagePicker*)objc_getAssociatedObject(self, &attachSelfKey);
+    
+    UICollectionViewCell* cell = [self performSelector:@selector(override_collectionView:cellForItemAtIndexPath:) withObject:collectionView withObject:indexPath];
+    
+    if (picker != nil) {
+        picker.curIndexPath = indexPath;
+        if ([picker isCurIndexInIndexPaths] != -1) {
+            UIButton* indicatorButton = [picker getIndicatorButton:cell];
+            
+            if (indicatorButton == nil) {
+                // do select(add button)
+                [picker addIndicatorButton:cell];
+            }
+        } else {
+            [picker removeIndicatorButton:cell];
+        }
+    }
+    
+    return cell;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath;

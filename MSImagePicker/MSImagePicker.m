@@ -162,7 +162,7 @@ static char attachSelfKey;
     }
     
     /**
-     *  the collection base class is UICollectionView, so delegate, datasoucr ...
+     *  the collection base class is UICollectionView, so delegate, datasource ...
      */
     self.lastDelegate = [collection valueForKey:@"delegate"];
     [collection setValue:self forKey:@"delegate"];

@@ -15,6 +15,7 @@
 		8E9D3BC91B04A3A6005AAF00 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D3BC71B04A3A6005AAF00 /* LaunchScreen.xib */; };
 		8E9D3BD51B04A3A6005AAF00 /* DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D3BD41B04A3A6005AAF00 /* DemoTests.m */; };
 		8E9D3BE11B04A404005AAF00 /* MSImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D3BE01B04A404005AAF00 /* MSImagePicker.m */; };
+		8E9D3BE31B0594A4005AAF00 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E9D3BE21B0594A3005AAF00 /* QuickLook.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		8E9D3BD41B04A3A6005AAF00 /* DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoTests.m; sourceTree = "<group>"; };
 		8E9D3BDF1B04A404005AAF00 /* MSImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSImagePicker.h; sourceTree = "<group>"; };
 		8E9D3BE01B04A404005AAF00 /* MSImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSImagePicker.m; sourceTree = "<group>"; };
+		8E9D3BE21B0594A3005AAF00 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E9D3BE31B0594A4005AAF00 /* QuickLook.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +103,7 @@
 		8E9D3BB81B04A3A5005AAF00 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8E9D3BE21B0594A3005AAF00 /* QuickLook.framework */,
 				8E9D3BB91B04A3A5005AAF00 /* Info.plist */,
 				8E9D3BBA1B04A3A5005AAF00 /* main.m */,
 			);

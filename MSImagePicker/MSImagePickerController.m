@@ -112,7 +112,8 @@ static char attachSelfKey;
 - (void) addIndicatorButton:(UIView*) v {
     UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.layer.cornerRadius = 15;
-    button.backgroundColor = [UIColor blueColor];
+    
+    [button setImage:[UIImage imageNamed:@"AssetsPickerChecked"] forState:UIControlStateNormal];
     [v addSubview:button];
     
     [button setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -158,6 +159,7 @@ static char attachSelfKey;
     
     if (collection == nil) {
         if (self.haveExchangeMethod) {
+            // reset method
             Method m2 = class_getInstanceMethod([self.lastDelegate class], @selector(override_collectionView:cellForItemAtIndexPath:));
             Method m3 = class_getInstanceMethod([self.lastDelegate class], @selector(collectionView:cellForItemAtIndexPath:));
             method_exchangeImplementations(m2, m3);

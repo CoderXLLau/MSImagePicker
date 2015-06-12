@@ -239,11 +239,6 @@ static char attachSelfKey;
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 {
-    SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%s", sel_getName(_cmd)]);
-    if ([self.lastDelegate respondsToSelector:sel]) {
-        [self.lastDelegate performSelector:sel withObject:collectionView withObject:indexPath];
-    }
-    
     self.curIndexPath = indexPath;
     
     UIView* cell = [collectionView cellForItemAtIndexPath:indexPath];
@@ -258,6 +253,11 @@ static char attachSelfKey;
         [self removeIndicatorButton:cell];
     }
     
+    SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%s", sel_getName(_cmd)]);
+    if ([self.lastDelegate respondsToSelector:sel]) {
+        [self.lastDelegate performSelector:sel withObject:collectionView withObject:indexPath];
+    }
+
     return YES;
 }
 
